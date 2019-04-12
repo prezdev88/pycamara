@@ -45,7 +45,7 @@ class Camara:
         self.i += 1
 
         try:
-            pygame.image.save(self.img, str(self.i)+"_"+self.photoPath+paso+".png")
+            pygame.image.save(self.img, self.photoPath+str(self.i)+"_"+paso+".png")
         except Exception:
             pygame.image.save(self.img, str(self.i)+"_"+paso+".png")
         
