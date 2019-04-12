@@ -14,7 +14,15 @@ class Camara:
     def close(self):
         self.webcam.stop()
 
+    def initConstants(self):
+        self.ENTER = 13
+        self.SPACE = 32
+        self.MOUSE_BUTTON_1 = 1
+
+
+
     def __init__(self):
+        self.initConstants()
         self.photoPath = "/home/pi/"
 
         # Centrado
@@ -75,13 +83,11 @@ class Camara:
                     
                     if e.type == pygame.KEYDOWN:
                         # si es enter o espacio
-                        if e.key == 13 or e.key == 32:
+                        if e.key == self.ENTER or e.key == self.SPACE:
                             self.takePhoto()
 
-                    if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
+                    if e.type == pygame.MOUSEBUTTONUP and e.button == self.MOUSE_BUTTON_1:
                         self.takePhoto()
-
-                    
 
                 # draw frame
                 self.screen.blit(self.img, (0,0))
