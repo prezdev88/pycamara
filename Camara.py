@@ -1,4 +1,5 @@
 # sudo pip3 install pygame
+# https://tpec05.blogspot.com/2016/11/dibujo-de-figuras-geometricas-en-pygame.html
 
 import pygame.camera
 import pygame.image
@@ -19,11 +20,20 @@ class Camara:
         self.SPACE = 32
         self.MOUSE_BUTTON_1 = 1
 
+    def init_colors(self):
+        self.BLACK = (0, 0, 0)
+        self.WHITE = (255, 255, 255)
+        self.BLUE = (0, 191, 255)
 
+        self.COLOR_LETRA = self.WHITE
+        self.COLOR_FONDO_LETRA = self.BLACK
 
     def __init__(self):
         self.initConstants()
-        self.photoPath = "/home/pi/"
+        self.PHOTOS_PATH = "/home/pi/"
+        self.init_colors()
+        self.is_conteo = False
+        self.comenzar_conteo = False
 
         # Centrado
         os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -43,17 +53,17 @@ class Camara:
 
         self.i = 0
 
-        self.white = (255, 255, 255)
-        self.black = (0,0,0)
-
-        self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
+        self.myfont = pygame.font.SysFont(None, 30)
 
     def takePhoto(self):
+        self.comenzar_conteo = True
+        self.is_conteo = True
+
         paso = self.pasos[self.i]
         self.i += 1
 
         try:
-            pygame.image.save(self.img, self.photoPath+str(self.i)+"_"+paso+".png")
+            pygame.image.save(self.img, self.PHOTOS_PATH+str(self.i)+"_"+paso+".png")
         except Exception:
             pygame.image.save(self.img, str(self.i)+"_"+paso+".png")
         
@@ -76,7 +86,17 @@ class Camara:
         pygame.font.init()
 
         try:
+            
             while True :
+
+                if self.comenzar_conteo:
+                    start_ticks = pygame.time.get_ticks() #starter tick
+                    self.comenzar_conteo = False
+
+                if self.is_conteo:
+                    seconds = (pygame.time.get_ticks()-start_ticks) / 1000
+                    print(seconds)    
+
                 for e in pygame.event.get() :
                     if e.type == pygame.QUIT :
                         self.exit()
@@ -91,14 +111,21 @@ class Camara:
 
                 # draw frame
                 self.screen.blit(self.img, (0,0))
-                # Texto
-                texto = self.myfont.render(self.pasos[self.i], False, self.white)
 
-                #screen.blit(rectangle, (0,0))
-                self.screen.blit(texto,(0,0))
+                # Fondo para las letras
+                pygame.draw.rect(self.screen, self.COLOR_FONDO_LETRA, [0, 0, self.WIDTH, 30], 0)
+
+                # Texto
+                texto = self.myfont.render(self.pasos[self.i], False, self.COLOR_LETRA)
+
+                self.screen.blit(texto,(5,5))
                 
                 pygame.display.flip()
                 # grab next frame    
                 self.img = self.webcam.get_image()
         except SystemExit:
             pygame.quit()
+
+
+cam = Camara()
+cam.open()
