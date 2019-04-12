@@ -45,10 +45,10 @@ class Camara:
 
         self.pasos = list()
 
-        self.pasos.append("CARNET_FRONT")
-        self.pasos.append("CARNET_BACK")
-        self.pasos.append("LICENCIA_FRONT")
-        self.pasos.append("LICENCIA_BACK")
+        self.pasos.append("FOTO_CARNET_DELANTERA")
+        self.pasos.append("FOTO_CARNET_TRASERA")
+        self.pasos.append("FOTO_LICENCIA_DELANTERA")
+        self.pasos.append("FOTO_LICENCIA_TRASERA")
         self.pasos.append("SELFIE")
 
         self.i = 0
@@ -56,8 +56,8 @@ class Camara:
         self.myfont = pygame.font.SysFont(None, 30)
 
     def takePhoto(self):
-        self.comenzar_conteo = True
-        self.is_conteo = True
+        self.comenzar_conteo = False
+        self.is_conteo = False
 
         paso = self.pasos[self.i]
         self.i += 1
@@ -88,14 +88,19 @@ class Camara:
         try:
             
             while True :
-
                 if self.comenzar_conteo:
                     start_ticks = pygame.time.get_ticks() #starter tick
                     self.comenzar_conteo = False
 
                 if self.is_conteo:
                     seconds = (pygame.time.get_ticks()-start_ticks) / 1000
-                    print(seconds)    
+                    # transformar seconds a entero
+
+                    # pintar seconds al medio de la pantalla
+                    print(seconds)   
+
+                    if(seconds > 3):
+                        self.takePhoto() 
 
                 for e in pygame.event.get() :
                     if e.type == pygame.QUIT :
@@ -104,10 +109,12 @@ class Camara:
                     if e.type == pygame.KEYDOWN:
                         # si es enter o espacio
                         if e.key == self.ENTER or e.key == self.SPACE:
-                            self.takePhoto()
+                            self.comenzar_conteo = True
+                            self.is_conteo = True
 
                     if e.type == pygame.MOUSEBUTTONUP and e.button == self.MOUSE_BUTTON_1:
-                        self.takePhoto()
+                        self.comenzar_conteo = True
+                        self.is_conteo = True
 
                 # draw frame
                 self.screen.blit(self.img, (0,0))
@@ -116,7 +123,7 @@ class Camara:
                 pygame.draw.rect(self.screen, self.COLOR_FONDO_LETRA, [0, 0, self.WIDTH, 30], 0)
 
                 # Texto
-                texto = self.myfont.render(self.pasos[self.i], False, self.COLOR_LETRA)
+                texto = self.myfont.render(self.pasos[self.i].replace("_"," "), False, self.COLOR_LETRA)
 
                 self.screen.blit(texto,(5,5))
                 
