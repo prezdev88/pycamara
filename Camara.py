@@ -40,6 +40,18 @@ class Camara:
 
         self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
+    def takePhoto(self):
+        paso = self.pasos[self.i]
+        self.i += 1
+
+        try:
+            pygame.image.save(self.img, str(self.i)+"_"+self.photoPath+paso+".png")
+        except Exception:
+            pygame.image.save(self.img, str(self.i)+"_"+paso+".png")
+        
+        if self.i == 5:
+            self.exit()
+
     def open(self):
         self.webcam.start()
         
@@ -61,14 +73,15 @@ class Camara:
                     if e.type == pygame.QUIT :
                         self.exit()
                     
-                    if e.type==pygame.KEYDOWN:
-                        if e.key == 13:
-                            paso = self.pasos[self.i]
-                            pygame.image.save(self.img, self.photoPath+paso+".png")
-                            self.i += 1
+                    if e.type == pygame.KEYDOWN:
+                        # si es enter o espacio
+                        if e.key == 13 or e.key == 32:
+                            self.takePhoto()
 
-                            if self.i == 5:
-                                self.exit()
+                    if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
+                        self.takePhoto()
+
+                    
 
                 # draw frame
                 self.screen.blit(self.img, (0,0))
