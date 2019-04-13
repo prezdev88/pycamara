@@ -2,7 +2,6 @@
 # sudo apt-get install tk
 
 from tkinter import *    # Carga módulo tk (widgets estándar)
-from tkinter import ttk  # Carga ttk (para widgets nuevos 8.5+)
 from Camara import *
 from PIL import ImageTk, Image
 
@@ -31,7 +30,7 @@ class Main:
 
     def main(self):
         # -------------------- init components --------------------
-        cameraIcon = ImageTk.PhotoImage(Image.open("camara.png"))
+        cameraIcon = ImageTk.PhotoImage(Image.open(K.PHOTO_ICON))
 
         self.lbl_camera = Label(self.root, image = cameraIcon)
         self.lbl_camera.bind('<Double-Button-1>', self.camera_click_event)
