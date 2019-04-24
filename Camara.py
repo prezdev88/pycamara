@@ -66,6 +66,7 @@ class Camara:
 
         try:
             while True :
+                ''' 
                 if self.comenzar_conteo:
                     start_ticks = pygame.time.get_ticks() #starter tick
                     self.comenzar_conteo = False
@@ -87,6 +88,7 @@ class Camara:
                         )
 
                         # print(seconds)
+                '''
 
                 for e in pygame.event.get() :
                     if e.type == pygame.QUIT :
@@ -95,12 +97,20 @@ class Camara:
                     if e.type == pygame.KEYDOWN:
                         # si es enter o espacio
                         if e.key == Buttons.ENTER or e.key == Buttons.SPACE:
+                            '''
                             self.comenzar_conteo = True
                             self.is_conteo = True
+                            '''
+                            self.takePhoto()
+
 
                     if e.type == pygame.MOUSEBUTTONUP and e.button == Buttons.MOUSE_BUTTON_1:
+                        '''
                         self.comenzar_conteo = True
                         self.is_conteo = True
+                        '''
+                        self.takePhoto()
+
 
                 # draw frame
                 self.screen.blit(self.img, (0,0))
